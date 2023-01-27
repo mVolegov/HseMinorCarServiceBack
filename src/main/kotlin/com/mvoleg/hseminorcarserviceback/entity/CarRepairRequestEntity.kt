@@ -1,8 +1,6 @@
 package com.mvoleg.hseminorcarserviceback.entity
 
 import jakarta.persistence.*
-import org.hibernate.annotations.Cascade
-import org.hibernate.annotations.CascadeType
 import java.math.BigDecimal
 
 @Entity
@@ -11,15 +9,13 @@ class CarRepairRequestEntity (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
+    var id: Long = 0L,
 
-    @ManyToOne
-    @Cascade(CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     var client: ClientEntity,
 
-    @ManyToOne
-    @Cascade(CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_id")
     var car: CarEntity,
 

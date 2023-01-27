@@ -9,7 +9,7 @@ class ClientEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
+    var id: Long = 0L,
 
     @Column(name = "car_owner_name", nullable = false, unique = true)
     var carOwnerName: String = "",
@@ -18,6 +18,6 @@ class ClientEntity(
     var carOwnerContactInfo: String = "",
 
     @JsonIgnore
-    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     var repairRequests: List<CarRepairRequestEntity> = emptyList()
 )
