@@ -1,5 +1,6 @@
 package com.mvoleg.hseminorcarserviceback.dto
 
+import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestStatus
 import java.math.BigDecimal
 
 data class CarRepairRequestDTO(
@@ -16,5 +17,5 @@ data class CarRepairRequestDTO(
     val appealReason: String,
     val declaredWorks: String,
     val totalPriceOfWorks: BigDecimal,
-    val status: String? = "NONE"
+    val status: String = CarRepairRequestStatus.NONE.statusName
 )

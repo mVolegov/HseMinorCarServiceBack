@@ -2,15 +2,16 @@ package com.mvoleg.hseminorcarserviceback.service.impl
 
 import com.mvoleg.hseminorcarserviceback.dto.CarRepairRequestDTO
 import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestEntity
+import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestStatus
 import com.mvoleg.hseminorcarserviceback.exception.CarRepairRequestNotFoundException
 import com.mvoleg.hseminorcarserviceback.mapper.Mapper
 import com.mvoleg.hseminorcarserviceback.repository.CarRepairRequestRepository
 import com.mvoleg.hseminorcarserviceback.repository.CarRepository
 import com.mvoleg.hseminorcarserviceback.repository.ClientRepository
 import com.mvoleg.hseminorcarserviceback.service.CarRepairRequestService
-import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CarRepairRequestServiceImpl(
@@ -48,7 +49,7 @@ class CarRepairRequestServiceImpl(
             dto.appealReason,
             dto.declaredWorks,
             dto.totalPriceOfWorks,
-            dto.status ?: ""
+            dto.status
         )
 
         return carRepairRequestRepository.save(carRepairRequestEntityToSave)
@@ -60,6 +61,7 @@ class CarRepairRequestServiceImpl(
             .findByIdOrNull(requestId)
             ?: throw CarRepairRequestNotFoundException(requestId)
 
+        carRepairRequestEntity.id = requestId
         carRepairRequestEntity.car = Mapper.extractCarEntityFromCarRepairRequestDTO(dto)
         carRepairRequestEntity.client = Mapper.extractClientEntityFromCarRepairRequestDTO(dto)
         carRepairRequestEntity.appealReason = dto.appealReason
@@ -80,7 +82,7 @@ class CarRepairRequestServiceImpl(
             .findByIdOrNull(id)
             ?: throw CarRepairRequestNotFoundException(id)
 
-        carRepairRequestEntity.status = "DONE"
+        carRepairRequestEntity.status = CarRepairRequestStatus.DONE.name
 
         return carRepairRequestRepository.save(carRepairRequestEntity)
     }
