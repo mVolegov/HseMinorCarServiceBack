@@ -9,7 +9,7 @@ class CarEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0,
+    var id: Long = 0L,
 
     @Column(name = "car_name", nullable = false)
     var carName: String = "",
@@ -27,6 +27,6 @@ class CarEntity(
     var carLicensePlateNumber: String = "",
 
     @JsonIgnore
-    @OneToMany(mappedBy = "car", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "car", fetch = FetchType.EAGER)
     var repairRequests: List<CarRepairRequestEntity> = emptyList()
 )
