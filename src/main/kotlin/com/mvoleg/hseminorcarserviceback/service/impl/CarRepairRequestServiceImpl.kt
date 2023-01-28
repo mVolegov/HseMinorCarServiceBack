@@ -24,14 +24,13 @@ class CarRepairRequestServiceImpl(
     }
 
     override fun getById(id: Long): CarRepairRequestDTO {
-        val carRepairRequestEntity = (carRepairRequestRepository
+        val carRepairRequestEntity = carRepairRequestRepository
             .findByIdOrNull(id)
-            ?: throw CarRepairRequestNotFoundException(id))
+            ?: throw CarRepairRequestNotFoundException(id)
 
         return Mapper.mapCarRepairRequestEntityToDTO(carRepairRequestEntity);
     }
 
-    @Transactional
     override fun create(dto: CarRepairRequestDTO): CarRepairRequestEntity {
         val carRepairRequestEntityToSave = Mapper.mapCarRepairRequestDTOtoEntity(dto)
 
@@ -40,9 +39,9 @@ class CarRepairRequestServiceImpl(
 
     @Transactional
     override fun update(requestId: Long, dto: CarRepairRequestDTO): CarRepairRequestEntity {
-        carRepairRequestRepository
-            .findByIdOrNull(requestId)
-            ?: throw CarRepairRequestNotFoundException(requestId)
+        if (!carRepairRequestRepository.existsById(requestId)) {
+            throw CarRepairRequestNotFoundException(requestId)
+        }
 
         val carRepairRequestEntity = Mapper.mapCarRepairRequestDTOtoEntity(dto)
         carRepairRequestEntity.id = requestId
@@ -50,8 +49,11 @@ class CarRepairRequestServiceImpl(
         return carRepairRequestRepository.save(carRepairRequestEntity)
     }
 
+    @Transactional
     override fun delete(id: Long) {
-        if (!carRepairRequestRepository.existsById(id)) throw CarRepairRequestNotFoundException(id)
+        if (!carRepairRequestRepository.existsById(id)) {
+            throw CarRepairRequestNotFoundException(id)
+        }
 
         carRepairRequestRepository.deleteById(id)
     }
@@ -62,11 +64,13 @@ class CarRepairRequestServiceImpl(
             .findByIdOrNull(id)
             ?: throw CarRepairRequestNotFoundException(id)
 
-        carRepairRequestEntity.status = CarRepairRequestStatus.DONE.name
+        if (carRepairRequestEntity.status != CarRepairRequestStatus.DONE.statusName) {
+            carRepairRequestEntity.status = CarRepairRequestStatus.DONE.statusName
 
-        carRepairRequestArchiveRepository.save(
-            Mapper.extractArchiveEntityFromCarRepairRequestEntity(carRepairRequestEntity)
-        )
+            carRepairRequestArchiveRepository.save(
+                Mapper.extractArchiveEntityFromCarRepairRequestEntity(carRepairRequestEntity)
+            )
+        }
 
         return carRepairRequestRepository.save(carRepairRequestEntity)
     }
