@@ -17,5 +17,5 @@ data class CarRepairRequestDTO(
     val appealReason: String,
     val declaredWorks: String,
     val totalPriceOfWorks: BigDecimal,
-    val status: String = CarRepairRequestStatus.NONE.statusName
+    val status: String = CarRepairRequestStatus.ACCEPTED.statusName
 )
