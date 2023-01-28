@@ -8,8 +8,6 @@ import com.mvoleg.hseminorcarserviceback.exception.CarRepairRequestNotFoundExcep
 import com.mvoleg.hseminorcarserviceback.mapper.Mapper
 import com.mvoleg.hseminorcarserviceback.repository.CarRepairRequestArchiveRepository
 import com.mvoleg.hseminorcarserviceback.repository.CarRepairRequestRepository
-import com.mvoleg.hseminorcarserviceback.repository.CarRepository
-import com.mvoleg.hseminorcarserviceback.repository.ClientRepository
 import com.mvoleg.hseminorcarserviceback.service.CarRepairRequestService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -18,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class CarRepairRequestServiceImpl(
     val carRepairRequestRepository: CarRepairRequestRepository,
-    val clientRepository: ClientRepository,
-    val carRepository: CarRepository,
     val carRepairRequestArchiveRepository: CarRepairRequestArchiveRepository
 ): CarRepairRequestService {
 
@@ -37,47 +33,19 @@ class CarRepairRequestServiceImpl(
 
     @Transactional
     override fun create(dto: CarRepairRequestDTO): CarRepairRequestEntity {
-        val clientEntity = clientRepository
-            .findByCarOwnerName(dto.carOwnerName.trim())
-            ?: clientRepository.save(Mapper.extractClientEntityFromCarRepairRequestDTO(dto))
-
-        val carEntity = carRepository
-            .findByCarLicensePlateNumber(dto.carLicensePlateNumber.trim())
-            ?: carRepository.save(Mapper.extractCarEntityFromCarRepairRequestDTO(dto))
-
-        if (carEntity.carColor != dto.carColor) {
-            carEntity.carColor = dto.carColor
-
-            if (carEntity.carMileage != dto.carMileage) {
-                carEntity.carMileage = dto.carMileage
-            }
-        }
-
-        val carRepairRequestEntityToSave = CarRepairRequestEntity(
-            0,
-            clientEntity,
-            carEntity,
-            dto.appealReason,
-            dto.declaredWorks,
-            dto.totalPriceOfWorks,
-            dto.status
-        )
+        val carRepairRequestEntityToSave = Mapper.mapCarRepairRequestDTOtoEntity(dto)
 
         return carRepairRequestRepository.save(carRepairRequestEntityToSave)
     }
 
     @Transactional
     override fun update(requestId: Long, dto: CarRepairRequestDTO): CarRepairRequestEntity {
-        val carRepairRequestEntity = carRepairRequestRepository
+        carRepairRequestRepository
             .findByIdOrNull(requestId)
             ?: throw CarRepairRequestNotFoundException(requestId)
 
+        val carRepairRequestEntity = Mapper.mapCarRepairRequestDTOtoEntity(dto)
         carRepairRequestEntity.id = requestId
-        carRepairRequestEntity.car = Mapper.extractCarEntityFromCarRepairRequestDTO(dto)
-        carRepairRequestEntity.client = Mapper.extractClientEntityFromCarRepairRequestDTO(dto)
-        carRepairRequestEntity.appealReason = dto.appealReason
-        carRepairRequestEntity.declaredWorks = dto.declaredWorks
-        carRepairRequestEntity.totalPriceOfWorks = dto.totalPriceOfWorks
 
         return carRepairRequestRepository.save(carRepairRequestEntity)
     }
