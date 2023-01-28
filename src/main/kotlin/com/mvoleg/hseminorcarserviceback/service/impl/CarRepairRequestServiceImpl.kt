@@ -1,13 +1,13 @@
 package com.mvoleg.hseminorcarserviceback.service.impl
 
 import com.mvoleg.hseminorcarserviceback.dto.CarRepairRequestDTO
-import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestArchiveEntity
-import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestEntity
-import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestStatus
+import com.mvoleg.hseminorcarserviceback.entity.*
 import com.mvoleg.hseminorcarserviceback.exception.CarRepairRequestNotFoundException
 import com.mvoleg.hseminorcarserviceback.mapper.Mapper
 import com.mvoleg.hseminorcarserviceback.repository.CarRepairRequestArchiveRepository
 import com.mvoleg.hseminorcarserviceback.repository.CarRepairRequestRepository
+import com.mvoleg.hseminorcarserviceback.repository.CarRepository
+import com.mvoleg.hseminorcarserviceback.repository.ClientRepository
 import com.mvoleg.hseminorcarserviceback.service.CarRepairRequestService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class CarRepairRequestServiceImpl(
     val carRepairRequestRepository: CarRepairRequestRepository,
+    val clientRepository: ClientRepository,
+    val carRepository: CarRepository,
     val carRepairRequestArchiveRepository: CarRepairRequestArchiveRepository
 ): CarRepairRequestService {
 
@@ -31,8 +33,19 @@ class CarRepairRequestServiceImpl(
         return Mapper.mapCarRepairRequestEntityToDTO(carRepairRequestEntity);
     }
 
+    @Transactional
     override fun create(dto: CarRepairRequestDTO): CarRepairRequestEntity {
+        val clientEntity = clientRepository
+            .findByCarOwnerName(dto.carOwnerName.trim())
+            ?: clientRepository.save(Mapper.extractClientEntityFromCarRepairRequestDTO(dto))
+
+        val carEntity = carRepository
+            .findByCarLicensePlateNumber(dto.carLicensePlateNumber.trim())
+            ?: carRepository.save(Mapper.extractCarEntityFromCarRepairRequestDTO(dto))
+
         val carRepairRequestEntityToSave = Mapper.mapCarRepairRequestDTOtoEntity(dto)
+        carRepairRequestEntityToSave.client.id = clientEntity.id
+        carRepairRequestEntityToSave.car.id = carEntity.id
 
         return carRepairRequestRepository.save(carRepairRequestEntityToSave)
     }
