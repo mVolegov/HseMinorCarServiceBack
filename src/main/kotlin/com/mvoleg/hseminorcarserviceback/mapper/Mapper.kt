@@ -2,6 +2,7 @@ package com.mvoleg.hseminorcarserviceback.mapper
 
 import com.mvoleg.hseminorcarserviceback.dto.CarRepairRequestDTO
 import com.mvoleg.hseminorcarserviceback.entity.CarEntity
+import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestArchiveEntity
 import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestEntity
 import com.mvoleg.hseminorcarserviceback.entity.ClientEntity
 import org.hibernate.annotations.Comment
@@ -43,7 +44,26 @@ class Mapper {
                 dto.carName,
                 dto.carManufactureYear,
                 dto.carMileage,
-                dto.carColor, dto.carLicensePlateNumber
+                dto.carColor,
+                dto.carLicensePlateNumber
+            )
+        }
+
+        fun extractArchiveEntityFromCarRepairRequestEntity(entity: CarRepairRequestEntity):
+                CarRepairRequestArchiveEntity {
+            return CarRepairRequestArchiveEntity(
+                0,
+                entity.client.carOwnerName,
+                entity.client.carOwnerContactInfo,
+                entity.car.carName,
+                entity.car.carManufactureYear,
+                entity.car.carMileage,
+                entity.car.carColor,
+                entity.car.carLicensePlateNumber,
+                entity.appealReason,
+                entity.declaredWorks,
+                entity.totalPriceOfWorks,
+                entity.status
             )
         }
     }

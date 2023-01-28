@@ -1,10 +1,12 @@
 package com.mvoleg.hseminorcarserviceback.service.impl
 
 import com.mvoleg.hseminorcarserviceback.dto.CarRepairRequestDTO
+import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestArchiveEntity
 import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestEntity
 import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestStatus
 import com.mvoleg.hseminorcarserviceback.exception.CarRepairRequestNotFoundException
 import com.mvoleg.hseminorcarserviceback.mapper.Mapper
+import com.mvoleg.hseminorcarserviceback.repository.CarRepairRequestArchiveRepository
 import com.mvoleg.hseminorcarserviceback.repository.CarRepairRequestRepository
 import com.mvoleg.hseminorcarserviceback.repository.CarRepository
 import com.mvoleg.hseminorcarserviceback.repository.ClientRepository
@@ -17,7 +19,8 @@ import org.springframework.transaction.annotation.Transactional
 class CarRepairRequestServiceImpl(
     val carRepairRequestRepository: CarRepairRequestRepository,
     val clientRepository: ClientRepository,
-    val carRepository: CarRepository
+    val carRepository: CarRepository,
+    val carRepairRequestArchiveRepository: CarRepairRequestArchiveRepository
 ): CarRepairRequestService {
 
     override fun getAll(): List<CarRepairRequestDTO> {
@@ -41,6 +44,14 @@ class CarRepairRequestServiceImpl(
         val carEntity = carRepository
             .findByCarLicensePlateNumber(dto.carLicensePlateNumber.trim())
             ?: carRepository.save(Mapper.extractCarEntityFromCarRepairRequestDTO(dto))
+
+        if (carEntity.carColor != dto.carColor) {
+            carEntity.carColor = dto.carColor
+
+            if (carEntity.carMileage != dto.carMileage) {
+                carEntity.carMileage = dto.carMileage
+            }
+        }
 
         val carRepairRequestEntityToSave = CarRepairRequestEntity(
             0,
@@ -77,6 +88,7 @@ class CarRepairRequestServiceImpl(
         carRepairRequestRepository.deleteById(id)
     }
 
+    @Transactional
     override fun setStatusDone(id: Long): CarRepairRequestEntity {
         val carRepairRequestEntity = carRepairRequestRepository
             .findByIdOrNull(id)
@@ -84,6 +96,14 @@ class CarRepairRequestServiceImpl(
 
         carRepairRequestEntity.status = CarRepairRequestStatus.DONE.name
 
+        carRepairRequestArchiveRepository.save(
+            Mapper.extractArchiveEntityFromCarRepairRequestEntity(carRepairRequestEntity)
+        )
+
         return carRepairRequestRepository.save(carRepairRequestEntity)
+    }
+
+    override fun getArchive(): List<CarRepairRequestArchiveEntity> {
+        return carRepairRequestArchiveRepository.findAll()
     }
 }

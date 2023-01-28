@@ -1,6 +1,7 @@
 package com.mvoleg.hseminorcarserviceback.restcontroller
 
 import com.mvoleg.hseminorcarserviceback.dto.CarRepairRequestDTO
+import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestArchiveEntity
 import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestEntity
 import com.mvoleg.hseminorcarserviceback.service.CarRepairRequestService
 import org.springframework.http.HttpStatus
@@ -48,5 +49,11 @@ class CarRepairRequestRestController(
     fun setRequestStatusDone(@PathVariable("id") id: Long): ResponseEntity<String> {
         carRepairRequestService.setStatusDone(id)
         return ResponseEntity("Car repair request with id $id was successfully done", HttpStatus.OK)
+    }
+
+    @GetMapping("/requests/archive")
+    fun getRequestsArchive(): ResponseEntity<List<CarRepairRequestArchiveEntity>> {
+        val archive = carRepairRequestService.getArchive()
+        return ResponseEntity(archive, HttpStatus.OK)
     }
 }

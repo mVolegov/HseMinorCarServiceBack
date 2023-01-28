@@ -1,0 +1,8 @@
+package com.mvoleg.hseminorcarserviceback.repository
+
+import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestArchiveEntity
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+
+@Repository
+interface CarRepairRequestArchiveRepository: JpaRepository<CarRepairRequestArchiveEntity, Long>
