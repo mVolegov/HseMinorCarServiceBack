@@ -1,10 +1,7 @@
 package com.mvoleg.hseminorcarserviceback.mapper
 
 import com.mvoleg.hseminorcarserviceback.dto.CarRepairRequestDTO
-import com.mvoleg.hseminorcarserviceback.entity.CarEntity
-import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestArchiveEntity
-import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestEntity
-import com.mvoleg.hseminorcarserviceback.entity.ClientEntity
+import com.mvoleg.hseminorcarserviceback.entity.*
 
 class Mapper {
 
@@ -18,7 +15,7 @@ class Mapper {
                 appealReason = dto.appealReason,
                 declaredWorks = dto.declaredWorks,
                 totalPriceOfWorks = dto.totalPriceOfWorks,
-                status = dto.status
+                status = dto.status ?: CarRepairRequestStatus.ACCEPTED.statusName
             )
         }
 
