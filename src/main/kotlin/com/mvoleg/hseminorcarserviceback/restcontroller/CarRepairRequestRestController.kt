@@ -1,7 +1,6 @@
 package com.mvoleg.hseminorcarserviceback.restcontroller
 
 import com.mvoleg.hseminorcarserviceback.dto.CarRepairRequestDTO
-import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestArchiveEntity
 import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestEntity
 import com.mvoleg.hseminorcarserviceback.service.CarRepairRequestService
 import org.springframework.http.HttpStatus
