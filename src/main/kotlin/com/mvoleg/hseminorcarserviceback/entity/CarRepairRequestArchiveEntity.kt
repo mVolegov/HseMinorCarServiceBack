@@ -12,10 +12,10 @@ class CarRepairRequestArchiveEntity(
     val id: Long = 0L,
 
     @Column(name = "client_name")
-    val clientName: String = "",
+    val carOwnerName: String = "",
 
     @Column(name = "client_contact_info")
-    val clientContactInfo: String = "",
+    val carOwnerContactInfo: String = "",
 
     @Column(name = "car_name")
     val carName: String = "",
