@@ -87,8 +87,4 @@ class CarRepairRequestServiceImpl(
 
         return carRepairRequestRepository.save(carRepairRequestEntity)
     }
-
-    override fun getArchive(): List<CarRepairRequestArchiveEntity> {
-        return carRepairRequestArchiveRepository.findAll()
-    }
 }

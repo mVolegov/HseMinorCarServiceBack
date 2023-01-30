@@ -1,7 +1,6 @@
 package com.mvoleg.hseminorcarserviceback.service
 
 import com.mvoleg.hseminorcarserviceback.dto.CarRepairRequestDTO
-import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestArchiveEntity
 import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestEntity
 
 interface CarRepairRequestService {
@@ -17,6 +16,4 @@ interface CarRepairRequestService {
     fun delete(id: Long)
 
     fun setStatusDone(id: Long): CarRepairRequestEntity
-
-    fun getArchive(): List<CarRepairRequestArchiveEntity>
 }

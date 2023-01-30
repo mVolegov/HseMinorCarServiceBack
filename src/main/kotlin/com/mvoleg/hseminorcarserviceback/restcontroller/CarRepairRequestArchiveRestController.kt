@@ -1,7 +1,7 @@
 package com.mvoleg.hseminorcarserviceback.restcontroller
 
 import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestArchiveEntity
-import com.mvoleg.hseminorcarserviceback.service.CarRepairRequestService
+import com.mvoleg.hseminorcarserviceback.service.CarRepairRequestArchiveService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/requests/archive")
 class CarRepairRequestArchiveRestController(
-    val carRepairRequestService: CarRepairRequestService
+    val carRepairRequestArchiveService: CarRepairRequestArchiveService
 ) {
 
     @GetMapping
     fun getRequestsArchive(): ResponseEntity<List<CarRepairRequestArchiveEntity>> {
-        val archive = carRepairRequestService.getArchive()
+        val archive = carRepairRequestArchiveService.getArchive()
         return ResponseEntity(archive, HttpStatus.OK)
     }
 
     @GetMapping("/{id}")
     fun getArchivedRequestById(@PathVariable("id") id: Long): ResponseEntity<CarRepairRequestArchiveEntity> {
-        val archivedRequestById = carRepairRequestService.getArchievedRequestById(id)
+        val archivedRequestById = carRepairRequestArchiveService.getArchivedRequestById(id)
         return ResponseEntity(archivedRequestById, HttpStatus.OK)
     }
 }
