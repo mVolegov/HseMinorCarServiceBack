@@ -85,6 +85,8 @@ class CarRepairRequestServiceImpl(
             )
         }
 
-        return carRepairRequestRepository.save(carRepairRequestEntity)
+        carRepairRequestRepository.deleteById(id);
+
+        return carRepairRequestEntity;
     }
 }
