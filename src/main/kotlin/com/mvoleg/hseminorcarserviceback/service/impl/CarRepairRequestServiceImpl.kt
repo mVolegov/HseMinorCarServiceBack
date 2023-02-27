@@ -12,6 +12,7 @@ import com.mvoleg.hseminorcarserviceback.service.CarRepairRequestService
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class CarRepairRequestServiceImpl(
@@ -80,9 +81,11 @@ class CarRepairRequestServiceImpl(
         if (carRepairRequestEntity.status != CarRepairRequestStatus.DONE.statusName) {
             carRepairRequestEntity.status = CarRepairRequestStatus.DONE.statusName
 
-            carRepairRequestArchiveRepository.save(
-                Mapper.extractArchiveEntityFromCarRepairRequestEntity(carRepairRequestEntity)
-            )
+            val archiveEntityFromCarRepairRequestEntity =
+                    Mapper.extractArchiveEntityFromCarRepairRequestEntity(carRepairRequestEntity)
+            archiveEntityFromCarRepairRequestEntity.completedDate = LocalDateTime.now()
+
+            carRepairRequestArchiveRepository.save(archiveEntityFromCarRepairRequestEntity)
         }
 
         carRepairRequestRepository.deleteById(id);
