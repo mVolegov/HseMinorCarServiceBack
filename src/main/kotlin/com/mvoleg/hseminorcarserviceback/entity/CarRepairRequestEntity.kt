@@ -2,6 +2,7 @@ package com.mvoleg.hseminorcarserviceback.entity
 
 import jakarta.persistence.*
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "car_repair_request")
@@ -29,5 +30,8 @@ class CarRepairRequestEntity (
     var totalPriceOfWorks: BigDecimal = BigDecimal.ZERO,
 
     @Column(name = "status", nullable = false)
-    var status: String = ""
+    var status: String = "",
+
+    @Column(name = "created_date")
+    var createdDate: LocalDateTime = LocalDateTime.MIN
 )

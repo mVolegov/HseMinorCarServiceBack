@@ -2,6 +2,7 @@ package com.mvoleg.hseminorcarserviceback.mapper
 
 import com.mvoleg.hseminorcarserviceback.dto.CarRepairRequestDTO
 import com.mvoleg.hseminorcarserviceback.entity.*
+import java.time.LocalDateTime
 
 class Mapper {
 
@@ -15,7 +16,8 @@ class Mapper {
                 appealReason = dto.appealReason,
                 declaredWorks = dto.declaredWorks,
                 totalPriceOfWorks = dto.totalPriceOfWorks,
-                status = dto.status ?: CarRepairRequestStatus.ACCEPTED.statusName
+                status = dto.status ?: CarRepairRequestStatus.ACCEPTED.statusName,
+                createdDate = dto.createdDate ?: LocalDateTime.now()
             )
         }
 
@@ -34,7 +36,8 @@ class Mapper {
                 appealReason = entity.appealReason,
                 declaredWorks = entity.declaredWorks,
                 totalPriceOfWorks = entity.totalPriceOfWorks,
-                status = entity.status
+                status = entity.status,
+                createdDate = entity.createdDate
             )
         }
 
@@ -71,7 +74,8 @@ class Mapper {
                 entity.appealReason,
                 entity.declaredWorks,
                 entity.totalPriceOfWorks,
-                entity.status
+                entity.status,
+                entity.createdDate
             )
         }
     }

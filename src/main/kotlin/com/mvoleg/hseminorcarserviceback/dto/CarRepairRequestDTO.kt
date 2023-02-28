@@ -2,6 +2,7 @@ package com.mvoleg.hseminorcarserviceback.dto
 
 import com.mvoleg.hseminorcarserviceback.entity.CarRepairRequestStatus
 import java.math.BigDecimal
+import java.time.LocalDateTime
 
 data class CarRepairRequestDTO(
     val id: Long? = null,
@@ -17,5 +18,6 @@ data class CarRepairRequestDTO(
     val appealReason: String,
     val declaredWorks: String,
     val totalPriceOfWorks: BigDecimal,
-    val status: String? = CarRepairRequestStatus.ACCEPTED.statusName
+    val status: String? = CarRepairRequestStatus.ACCEPTED.statusName,
+    val createdDate: LocalDateTime?
 )

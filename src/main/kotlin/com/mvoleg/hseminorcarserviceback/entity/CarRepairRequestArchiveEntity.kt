@@ -45,6 +45,9 @@ class CarRepairRequestArchiveEntity(
     @Column(name = "status")
     var status: String = "",
 
+    @Column(name = "created_date")
+    var createdDate: LocalDateTime = LocalDateTime.MIN,
+
     @Column(name = "completed_date")
     var completedDate: LocalDateTime = LocalDateTime.MIN
 )

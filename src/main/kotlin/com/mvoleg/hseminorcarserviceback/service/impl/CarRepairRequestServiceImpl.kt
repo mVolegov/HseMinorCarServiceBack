@@ -45,6 +45,7 @@ class CarRepairRequestServiceImpl(
             ?: carRepository.save(Mapper.extractCarEntityFromCarRepairRequestDTO(dto))
 
         val carRepairRequestEntityToSave = Mapper.mapCarRepairRequestDTOtoEntity(dto)
+        carRepairRequestEntityToSave.createdDate = LocalDateTime.now()
         carRepairRequestEntityToSave.client.id = clientEntity.id
         carRepairRequestEntityToSave.car.id = carEntity.id
 
